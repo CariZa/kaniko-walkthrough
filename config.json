@@ -1,0 +1,6 @@
+{
+    "credsStore":"ecr-login",
+    "credHelpers": {
+    "038835936948.dkr.ecr.eu-central-1.amazonaws.com/kaniko-test": "ecr-login"
+    }
+}
