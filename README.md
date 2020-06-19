@@ -6,9 +6,13 @@ https://github.com/GoogleContainerTools/kaniko
 
 This walkthrough has 3 parts:
 
-- Part 1: 100% local - Just build the image with Kaniko
+- Part 1: 100% local - Just build the image with Kaniko using Docker
 - Part 2: Include the cloud - Build image and send to aws ecr
 - Part 3: Kubernetes!
+
+![Image that says No Prob Llama with a cool Llama](/images/noprobllama-kaniko.png)
+
+Image reference: https://www.freepik.com/premium-vector/jumping-alpaca-llama-with-no-prob-llama-motivational-quote_6410008.htm
 
 ## Why use Kaniko?
 
@@ -20,11 +24,17 @@ You risk building containers with root access still inside. This is a security r
 
 Kaniko is a great tool to use inside CI/CD pipelines because you can use it to build more secure images to tag and send to registries (eg aws' ecr).
 
+Full disclosure though, Kaniko itself still has root. Which means it might not fit in with certain company comliances that expect no root at all in any images on an environmnet.
+
+Read more:
+
+https://zwischenzugs.com/2018/04/23/unprivileged-docker-builds-a-proof-of-concept/
+
 # Part 1
 
-## Using just docker & caching locally
+## Using just Docker & caching locally
 
-This is just a quick warmup exercise. Get to know kaniko in an simpler context.
+This is just a quick warmup exercise. Get to know Kaniko in an simpler context.
 
 ### Requirements:
 
@@ -32,7 +42,7 @@ Docker
 
 https://www.docker.com/products/docker-desktop
 
-Make sure you have a working docker environment and you can run and you can run:
+Make sure you have a working Docker environment and you can run and you can run:
 
     $ docker version
 
@@ -40,7 +50,7 @@ Make sure you have a working docker environment and you can run and you can run:
 
 https://github.com/GoogleContainerTools/kaniko#running-kaniko-in-docker
 
-You can test kaniko using just docker to start. This is a quick warmup before we get into working with cloud based registry like ecr.
+You can test Kaniko using just Docker to start. This is a quick warmup before we get into working with cloud based registry like ecr.
 
 Provide a Dockerfile:
 
@@ -55,7 +65,8 @@ ENTRYPOINT ["/bin/bash", "-c", "echo hello"]
 Then run (this will just build the image, but not do anything with it):
 
 ```
-docker run --rm --name test-kaniko \
+docker run --rm \
+--name test-kaniko \
 --volume $(pwd)/example-1/Dockerfile:/workplace/Dockerfile \
 gcr.io/kaniko-project/executor:latest --no-push --dockerfile /workplace/Dockerfile
 ```
@@ -72,9 +83,11 @@ Then tell Kaniko where to find the Dockerfile you want Kaniko to build:
 
     --dockerfile /workplace/Dockerfile
 
-Don't push to a registry just yet:
+Don't push to a registry just yet (this will just build the image, but do nothing further):
 
     --no-push
+
+A step like this could be used to notify you if a build stops working, so even this simplified example of using Kaniko could help you in a CI pipeline to do a simple check.
 
 # Part 2
 
@@ -215,15 +228,15 @@ Test Docker login:
 
 $ aws ecr get-login --region eu-central-1 --profile aws-kaniko-test --no-include-email
 
-Run this command when you get it (this will trigger the docker login):
+Run this command when you get it (this will trigger the Docker login):
 
 $ $(aws ecr get-login --region eu-central-1 --profile aws-kaniko-test  --no-include-email)
 
-Once you've confirmed your docker login works, lets set up the files we need to mount inside the running Kaniko instance.
+Once you've confirmed your Docker login works, lets set up the files we need to mount inside the running Kaniko instance.
 
 ### Setup files
 
-Your docker config
+Your Docker config
 
     $ touch config.json
 
@@ -298,7 +311,7 @@ There are some kaniko images worth noting:
 
 ## Using minikube to run Kaniko the kubernetes way 
 
-If you've managed to get the docker examples working, let's attempt to get it working with kubernetes using minikube. It will be very similar, we just have to convert the docker approach to a kubernetes approach:
+If you've managed to get the Docker examples working, let's attempt to get it working with kubernetes using minikube. It will be very similar, we just have to convert the Docker approach to a kubernetes approach:
 
 # TODO
 
