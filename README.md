@@ -10,7 +10,7 @@ This walkthrough has 3 parts:
 - Part 2: Include the cloud - Build image and send to aws ecr
 - Part 3: Kubernetes!
 
-![Image that says No Prob Llama with a cool Llama](/images/noprobllama-kaniko.png)
+![Image that says No Prob Llama with a cool Llama](/images/noprobllama-kaniko.jpg)
 
 Image reference: https://www.freepik.com/premium-vector/jumping-alpaca-llama-with-no-prob-llama-motivational-quote_6410008.htm
 
